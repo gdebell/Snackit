@@ -1,6 +1,6 @@
 
 exports.up = function(knex, Promise) {
-  return knex.schema.createTable('school', function (table) {
+  return knex.schema.createTable('store', function (table) {
     table.increments();
     table.string('name').notNullable();
     table.string('address').notNullable();
@@ -9,10 +9,10 @@ exports.up = function(knex, Promise) {
     table.integer('zip').notNullable();
     table.decimal('lat');
     table.decimal('long');
-    table.string('photo_url');
-  });
+    table.string('note');
+  })
 };
 
 exports.down = function(knex, Promise) {
-  return knex.schema.dropTable('school');
+    return knex.schema.dropTable('store');
 };
