@@ -10,9 +10,9 @@ exports.up = function(knex, Promise) {
     table.decimal('lat');
     table.decimal('long');
     table.string('note');
-  })
+  });
 };
 
 exports.down = function(knex, Promise) {
     return knex.schema.dropTable('store');
-};
+  };
