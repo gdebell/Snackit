@@ -6,6 +6,7 @@ $(document).on('ready', () => {
     console.log(start);
     console.log(end);
     distanceMap(start, end);
+    //calculateAndDisplayRoute();
   });
 });
 
@@ -16,7 +17,7 @@ function initMap() {
   zoom: 12,
   center: new google.maps.LatLng(39.7033,-105.00),
   mapTypeId: 'roadmap'
-  })
+});
   $.ajax({
     type: 'GET',
     url: '/map/data',
@@ -32,7 +33,9 @@ function initMap() {
 }
 
 //puts school and store markers on the map from database
+var locationListings;
 function  createMarkers (results) {
+  locationListings = results;
   //create school markers
   var appleImage = {
     url: 'http://www.freeiconspng.com/uploads/apple-icon-19.png',
@@ -49,7 +52,7 @@ function  createMarkers (results) {
       map: map
     });
   }
-
+  //create store markers
   var storeImage = {
     url: 'https://cdn3.iconfinder.com/data/icons/map-markers-1/512/supermarket-512.png',
     scaledSize: new google.maps.Size(20, 20)
@@ -65,30 +68,32 @@ function  createMarkers (results) {
       map: map
     });
   }
-
 }
 
 function distanceMap(start, end) {
- var bounds = new google.maps.LatLngBounds();
- var markersArray = [];
- var origin2 = start;
- var destinationA = end;
+  console.log(locationListings.schools);
+  var store = locationListings.schools;
 
- var destinationIcon = 'https://chart.googleapis.com/chart?' +
+  var bounds = new google.maps.LatLngBounds();
+  var markersArray = [];
+  var origin2 = start;
+  var destinationA = end;
+
+  var destinationIcon = 'https://chart.googleapis.com/chart?' +
            'chst=d_map_pin_letter&chld=D|FF0000|000000';
- var originIcon = 'https://chart.googleapis.com/chart?' +
+  var originIcon = 'https://chart.googleapis.com/chart?' +
            'chst=d_map_pin_letter&chld=O|FFFF00|000000';
 
- var geocoder = new google.maps.Geocoder();
- var service = new google.maps.DistanceMatrixService();
+  var geocoder = new google.maps.Geocoder();
+  var service = new google.maps.DistanceMatrixService();
 
- service.getDistanceMatrix({
-   origins: [origin2],
-   destinations: [destinationA],
-   travelMode: 'DRIVING',
-   unitSystem: google.maps.UnitSystem.METRIC,
-   avoidHighways: false,
-   avoidTolls: false
+  service.getDistanceMatrix({
+    origins: [origin2],
+    destinations: [destinationA],
+    travelMode: 'DRIVING',
+    unitSystem: google.maps.UnitSystem.METRIC,
+    avoidHighways: false,
+    avoidTolls: false
   }, function(response, status) {
     if (status !== 'OK') {
       console.log('Error was: ' + status);
@@ -129,9 +134,52 @@ function distanceMap(start, end) {
   });
  }
 
- function deleteMarkers(markersArray) {
-   for (var i = 0; i < markersArray.length; i++) {
-     markersArray[i].setMap(null);
-   }
-   markersArray = [];
- }
+
+//start here with  waypoint directions
+// function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+//   console.log('inside cal and display route function');
+//   var waypts = [];
+//   var checkboxArray = document.getElementById('waypoints');
+//   for (var i = 0; i < checkboxArray.length; i++) {
+//     if (checkboxArray.options[i].selected) {
+//       waypts.push({
+//         location: checkboxArray[i].value,
+//         stopover: true
+//       });
+//     }
+//   }
+//
+//   directionsService.route({
+//     origin: document.getElementById('startAddress').value,
+//     destination: document.getElementById('endAddress').value,
+//     waypoints: waypts,
+//     optimizeWaypoints: true,
+//     travelMode: 'DRIVING'
+//   }, function(response, status) {
+//     if (status === 'OK') {
+//       directionsDisplay.setDirections(response);
+//       var route = response.routes[0];
+//       var summaryPanel = document.getElementById('directions-panel');
+//       summaryPanel.innerHTML = '';
+//       // For each route, display summary information.
+//       for (var i = 0; i < route.legs.length; i++) {
+//         var routeSegment = i + 1;
+//         summaryPanel.innerHTML += '<b>Route Segment: ' + routeSegment +
+//             '</b><br>';
+//         summaryPanel.innerHTML += route.legs[i].start_address + ' to ';
+//         summaryPanel.innerHTML += route.legs[i].end_address + '<br>';
+//         summaryPanel.innerHTML += route.legs[i].distance.text + '<br><br>';
+//       }
+//     } else {
+//       window.alert('Directions request failed due to ' + status);
+//     }
+//   });
+// }
+
+
+function deleteMarkers(markersArray) {
+  for (var i = 0; i < markersArray.length; i++) {
+    markersArray[i].setMap(null);
+  }
+  markersArray = [];
+}
