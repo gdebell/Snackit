@@ -7,8 +7,8 @@ exports.up = function(knex, Promise) {
     table.string('city').notNullable();
     table.string('state').notNullable();
     table.integer('zip').notNullable();
-    table.decimal('lat');
-    table.decimal('long');
+    table.string('lat');
+    table.string('long');
     table.string('note');
   });
 };

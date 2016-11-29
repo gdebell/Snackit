@@ -43,10 +43,10 @@ function initMap() {
   });
 };
 
-
 //puts school and store markers on the map from database
 var locationListings;
 function  createMarkers (results) {
+  console.log(results);
   locationListings = results;
   //create school markers
   var appleImage = {
@@ -57,7 +57,7 @@ function  createMarkers (results) {
     var lat = parseFloat(results.schools[i].lat);
     var long = parseFloat(results.schools[i].long);
     // console.log('lat', lat, 'long', long);
-    var latLng = new google.maps.LatLng(lat,-long);
+    var latLng = new google.maps.LatLng(lat,long);
     var marker = new google.maps.Marker({
       position: latLng,
       icon: appleImage,
@@ -73,7 +73,8 @@ function  createMarkers (results) {
   for (var j = 0; j < results.stores.length; j++) {
     var storeLat = parseFloat(results.stores[j].lat);
     var storeLong = parseFloat(results.stores[j].long);
-    var latLng = new google.maps.LatLng(storeLat, -storeLong);
+    console.log('lat:', storeLat, 'long:', storeLong);
+    var latLng = new google.maps.LatLng(storeLat,storeLong);
     var marker = new google.maps.Marker({
       position: latLng,
       icon: storeImage,
@@ -84,7 +85,7 @@ function  createMarkers (results) {
 
 //start here with  waypoint directions
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-  var first = new google.maps.LatLng(39.724980, -104.973275)
+  var first = new google.maps.LatLng(39.724980,-104.973275)
   var waypts = [{location: first, stopover: true}];
 
   directionsService.route({

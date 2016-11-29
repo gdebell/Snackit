@@ -13,7 +13,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80222,
           lat: 39.6660473,
-          long: 104.9142629,
+          long: -104.9142629,
           note: 'Banana\'s available.'
         }),
         knex('store').insert
@@ -24,7 +24,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80218,
           lat: 39.724980,
-          long: 104.973275,
+          long: -104.973275,
           note: 'Snacks ready for pick up.'
         }),
         knex('store').insert
@@ -35,7 +35,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80222,
           lat: 39.6642343,
-          long: 104.9394083,
+          long: -104.9394083,
           note: 'Carrots and celery available!'
         }),
         knex('store').insert
@@ -46,7 +46,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80210,
           lat: 39.677453,
-          long: 104.972055,
+          long: -104.972055,
           note: 'Fruit available for pick up.'
         }),
         knex('store').insert
@@ -57,7 +57,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80202,
           lat: 39.75638,
-          long: 105.009016,
+          long: -105.009016,
           note: 'Lot\s of organic fruit available for pick up!'
         }),
         knex('store').insert
@@ -68,7 +68,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80218,
           lat: 39.73112470,
-          long: 104.97353640,
+          long: -104.97353640,
           note: 'Produce available for pick up at this location.'
         }),
         knex('store').insert
@@ -79,7 +79,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80222,
           lat: 39.667551,
-          long: 104.940563,
+          long: -104.940563,
           note: ''
         }),
         knex('store').insert
@@ -90,7 +90,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80204,
           lat: 39.73750180,
-          long: 104.99724310,
+          long: -104.99724310,
           note: 'Crackers and fruit packs available for pickup.'
         }),
         knex('store').insert
@@ -101,7 +101,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80203,
           lat: 39.7264519,
-          long: 104.9829914,
+          long: -104.9829914,
           note: 'Banana available.'
         }),
         knex('store').insert
@@ -112,7 +112,7 @@ exports.seed = function(knex, Promise) {
           state: 'Colorado',
           zip: 80218,
           lat: 39.7328580,
-          long: 104.9758486,
+          long: -104.9758486,
           note: 'Produce available.'
         })
       ]);
