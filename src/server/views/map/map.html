@@ -19,24 +19,10 @@
      <button type="submit" class="btn btn-default" id="searchMap">Submit</button>
     </form>
   </div>
-  <!-- <div>
-    <h1>List of Schools</h1>
-    <select class="form-control">
-        {% for school in schools %}
-      <option value="'latLong': [ {{ school.lat }}, {{ school.long }} ]"> {{ school.name }}</option>
-        {% endfor %}
-    </select>
-    <h1>List of Stores</h1>
-    <select class="form-control">
-        {% for store in stores %}
-      <option> {{ store.name }}</option>
-        {% endfor %}
-    </select>
-  </div> -->
-
 </div>
 <div id="output"></div>
 <div id="map"></div>
+<div id="directions_panel" style="margin:20px;background-color:#FFEE77;"></div>
 
 <script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyCDub-YA9BICdYSyrvcb3KkO7KDwlTqFIs&callback=initMap">
 </script>

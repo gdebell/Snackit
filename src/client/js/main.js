@@ -39,9 +39,6 @@ function initMap() {
     eve.preventDefault();
     const start = $('#startAddress').val();
     const end = $('#endAddress').val();
-    console.log(start);
-    console.log(end);
-    //distanceMap(start, end);
     calculateAndDisplayRoute(directionsService, directionsDisplay);
   });
 };
@@ -87,21 +84,20 @@ function  createMarkers (results) {
 
 //start here with  waypoint directions
 function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-  console.log('inside cal and display route function');
-  // var first = new google.maps.LatLng(39.6660473, -104.9142629)
-  // var waypts = [{location: first, stopover: true}];
+  var first = new google.maps.LatLng(39.724980, -104.973275)
+  var waypts = [{location: first, stopover: true}];
 
   directionsService.route({
     origin: document.getElementById('startAddress').value,
     destination: document.getElementById('endAddress').value,
-    //waypoints: waypts,
-    //optimizeWaypoints: true,
+    waypoints: waypts,
+    optimizeWaypoints: true,
     travelMode: 'DRIVING'
   }, function(response, status) {
     if (status === 'OK') {
       directionsDisplay.setDirections(response);
       var route = response.routes[0];
-      var summaryPanel = document.getElementById('directions-panel');
+      var summaryPanel = document.getElementById('directions_panel');
       summaryPanel.innerHTML = '';
       // For each route, display summary information.
       for (var i = 0; i < route.legs.length; i++) {
