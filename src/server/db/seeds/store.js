@@ -23,8 +23,8 @@ exports.seed = function(knex, Promise) {
           city: 'Denver',
           state: 'Colorado',
           zip: 80218,
-          lat: 39.4328,
-          long: 104.5827,
+          lat: 39.724980,
+          long: 104.973275,
           note: 'Snacks ready for pick up.'
         }),
         knex('store').insert
@@ -45,8 +45,8 @@ exports.seed = function(knex, Promise) {
           city: 'Denver',
           state: 'Colorado',
           zip: 80210,
-          lat: 39.409,
-          long: 104.5820,
+          lat: 39.677453,
+          long: 104.972055,
           note: 'Fruit available for pick up.'
         }),
         knex('store').insert
@@ -78,8 +78,8 @@ exports.seed = function(knex, Promise) {
           city: 'Denver',
           state: 'Colorado',
           zip: 80222,
-          lat: 39.400,
-          long: 104.5613,
+          lat: 39.667551,
+          long: 104.940563,
           note: ''
         }),
         knex('store').insert
