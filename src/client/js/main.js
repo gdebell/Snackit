@@ -1,27 +1,15 @@
-// $(document).on('ready', () => {
-//   $('.route').on('submit', (eve)=> {
-//     eve.preventDefault();
-//     const start = $('#startAddress').val();
-//     const end = $('#endAddress').val();
-//     console.log(start);
-//     console.log(end);
-//     //distanceMap(start, end);
-//     // calculateAndDisplayRoute(directionsService, directionsDisplay);
-//   });
-// });
-
 //creates a roadmap centered over Denver
 var map;
 function initMap() {
-  var directionsService = new google.maps.DirectionsService;
-  var directionsDisplay = new google.maps.DirectionsRenderer;
+  var directionsService = new google.maps.DirectionsService();
+  var directionsDisplay = new google.maps.DirectionsRenderer();
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
     center: new google.maps.LatLng(39.7033,-105.00),
     mapTypeId: 'roadmap'
   });
   directionsDisplay.setMap(map);
-
+  //ajax request to get long/lat of schools and stores in database
   $.ajax({
     type: 'GET',
     url: '/map/data',
@@ -34,14 +22,14 @@ function initMap() {
    .fail((err) => {
     console.log(err);
   });
-
+  //on submit, gets the start/end location from DOM
   $('.route').on('submit', (eve)=> {
     eve.preventDefault();
     const start = $('#startAddress').val();
     const end = $('#endAddress').val();
-    calculateAndDisplayRoute(directionsService, directionsDisplay);
+    findRoutes(directionsService, directionsDisplay);
   });
-};
+}
 
 //puts school and store markers on the map from database
 var locationListings;
@@ -50,7 +38,7 @@ function  createMarkers (results) {
   //create school markers
   var appleImage = {
     url: 'http://www.freeiconspng.com/uploads/apple-icon-19.png',
-    scaledSize: new google.maps.Size(20, 20)
+    scaledSize: new google.maps.Size(30, 30)
   };
   for (var i = 0; i < results.schools.length; i++) {
     var lat = parseFloat(results.schools[i].lat);
@@ -65,53 +53,93 @@ function  createMarkers (results) {
   //create store markers
   var storeImage = {
     url: 'https://cdn3.iconfinder.com/data/icons/map-markers-1/512/supermarket-512.png',
-    scaledSize: new google.maps.Size(20, 20)
+    scaledSize: new google.maps.Size(30, 30)
   };
   for (var j = 0; j < results.stores.length; j++) {
     var storeLat = parseFloat(results.stores[j].lat);
     var storeLong = parseFloat(results.stores[j].long);
-    var latLng = new google.maps.LatLng(storeLat,storeLong);
-    var marker = new google.maps.Marker({
-      position: latLng,
+    var latLngStore = new google.maps.LatLng(storeLat,storeLong);
+    var markerStore = new google.maps.Marker({
+      position: latLngStore,
       icon: storeImage,
       map: map
     });
   }
 }
 
-//start here with  waypoint directions
-function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+var shortestStoreLocation;
+var shortestTotalDistance = 100000000;
+var shortestData;
 
+//find all routes
+function findRoutes(directionsService) {
+  var result = []
   for (var i = 0; i < locationListings.stores.length; i++ ) {
     var storeLat = parseFloat(locationListings.stores[i].lat);
     var storeLong = parseFloat(locationListings.stores[i].long);
-    //create a function that loops through lat/long of store and calc the
-    //distance from the start location to waypt to end location.
-    //store the shortest distance as first variable.
-    var first = new google.maps.LatLng(storeLat,storeLong)
+    var first = new google.maps.LatLng(storeLat,storeLong);
     var waypts = [{location: first, stopover: true}];
-    var shortestTotalDistance = 100000000;
+    // directionsService.route({
+    //   origin: document.getElementById('startAddress').value,
+    //   destination: document.getElementById('endAddress').value,
+    //   waypoints: waypts,
+    //   optimizeWaypoints: true,
+    //   travelMode: 'DRIVING'
+    // }, calculateRoute)
 
-    directionsService.route({
-      origin: document.getElementById('startAddress').value,
-      destination: document.getElementById('endAddress').value,
-      waypoints: waypts,
-      optimizeWaypoints: true,
-      travelMode: 'DRIVING'
-    }, function(response, status) {
-      var route = response.routes[0];
-      var totalDistance = 0;
-      for (var i = 0; i < route.legs.length; i++) {
-        totalDistance += parseFloat(route.legs[i].distance.text);
-      }
-      //console.log('total distance before map display', totalDistance);
+    result.push(new Promise((resolve, reject) => {
+      directionsService.route({
+        origin: document.getElementById('startAddress').value,
+        destination: document.getElementById('endAddress').value,
+        waypoints: waypts,
+        optimizeWaypoints: true,
+        travelMode: 'DRIVING'
+      }, (response, status) => {
+        var route = response.routes[0];
+        var totalDistance = 0;
+        for (var i = 0; i < route.legs.length; i++) {
+          totalDistance += parseFloat(route.legs[i].distance.text);
+        }
+        response.totalDistance = totalDistance
+        resolve(response);
+      })
+    }))
+  }
+
+  //finds the shortest route to get to the store, returns store address
+  Promise.all(result)
+  .then(res => {
+    //console.log(res[8].routes[0].legs[0].end_address);
+    for (var i = 0; i < res.length; i++) {
+      let totalDistance = 0;
+      //console.log(res[i].totalDistance);
+      totalDistance += parseFloat(res[i].totalDistance);
+      //console.log('total distance', totalDistance);
       if (totalDistance < shortestTotalDistance) {
         shortestTotalDistance = totalDistance;
-        shortestData = response;
+        shortestStoreLocation = res[i].routes[0].legs[0].end_address;
       }
-      console.log(shortestTotalDistance);
+    }
+    //console.log(shortestTotalDistance, shortestStoreLocation);
+    return shortestStoreLocation
+  })
+  .then(data => {
+    console.log('in the second promise', data);
+  })
+}
+
+
+
+
+
+
+function drawRoute(response, status) {
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+    //console.log('status', status);
+    //console.log('response', response);
       if (status === 'OK') {
-        console.log('here is the response', shortestData);
+        //console.log('here is the response', shortestData);
+        //console.log(shortestData.routes[0].legs[0].end_address);
         directionsDisplay.setDirections(shortestData);
         // var route = response.routes[0];
         // var summaryPanel = document.getElementById('directions_panel');
@@ -132,9 +160,55 @@ function calculateAndDisplayRoute(directionsService, directionsDisplay) {
       } else {
         window.alert('Directions request failed due to ' + status);
       }
-    });
-  }
-}
+      //console.log('here is the shortest data:', storeLocation);
+};
+
+
+
+
+//calculate start to end, finding the closest school
+// function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+//   for (var i = 0; i < locationListings.schools.length; i++ ) {
+//     var schoolLat = parseFloat(locationListings.schools[i].lat);
+//     var schoolLong = parseFloat(locationListings.schools[i].long);
+//     var second = new google.maps.LatLng(schoolLat,schoolLong);
+//
+//     var waypts = [{location: second, stopover: true}];
+//     var shortestTotalDistance = 100000000;
+//     var shortestData;
+//
+//     directionsService.route({
+//       origin: document.getElementById('startAddress').value,
+//       destination: document.getElementById('endAddress').value,
+//       waypoints: waypts,
+//       optimizeWaypoints: true,
+//       travelMode: 'DRIVING'
+//     }, function(response, status) {
+//       var route = response.routes[0];
+//       var totalDistance = 0;
+//       for (var i = 0; i < route.legs.length; i++) {
+//         totalDistance += parseFloat(route.legs[i].distance.text);
+//         //console.log('captured distances...', totalDistance);
+//       }
+//       //console.log('total distance before map display', totalDistance);
+//       if (totalDistance < shortestTotalDistance) {
+//         shortestTotalDistance = totalDistance;
+//         shortestData = response;
+//       }
+//       //console.log('for real shortest distance', shortestTotalDistance, shortestData);
+//
+//       console.log(shortestData.routes[0].legs[0].end_address);
+//       console.log(document.getElementById('endAddress'));
+//       if (status === 'OK') {
+//         //console.log('here is the response', shortestData);
+//         //console.log(shortestData.routes[0].legs[0].end_address);
+//         directionsDisplay.setDirections(shortestData);
+//       } else {
+//         window.alert('Directions request failed due to ' + status);
+//       }
+//     });
+//   }
+// }
 
 function deleteMarkers(markersArray) {
   for (var i = 0; i < markersArray.length; i++) {
@@ -142,67 +216,3 @@ function deleteMarkers(markersArray) {
   }
   markersArray = [];
 }
-
-// function distanceMap(start, end) {
-//   console.log(locationListings.schools);
-//   var store = locationListings.schools;
-//
-//   var bounds = new google.maps.LatLngBounds();
-//   var markersArray = [];
-//   var origin2 = start;
-//   var destinationA = end;
-//
-//   var destinationIcon = 'https://chart.googleapis.com/chart?' +
-//            'chst=d_map_pin_letter&chld=D|FF0000|000000';
-//   var originIcon = 'https://chart.googleapis.com/chart?' +
-//            'chst=d_map_pin_letter&chld=O|FFFF00|000000';
-//
-//   var geocoder = new google.maps.Geocoder();
-//   var service = new google.maps.DistanceMatrixService();
-//
-//   service.getDistanceMatrix({
-//     origins: [origin2],
-//     destinations: [destinationA],
-//     travelMode: 'DRIVING',
-//     unitSystem: google.maps.UnitSystem.METRIC,
-//     avoidHighways: false,
-//     avoidTolls: false
-//   }, function(response, status) {
-//     if (status !== 'OK') {
-//       console.log('Error was: ' + status);
-//     } else {
-//       var originList = response.originAddresses;
-//       var destinationList = response.destinationAddresses;
-//       var outputDiv = document.getElementById('output');
-//       outputDiv.innerHTML = '';
-//       deleteMarkers(markersArray);
-//
-//       var showGeocodedAddressOnMap = function(asDestination) {
-//         var icon = asDestination ? destinationIcon : originIcon;
-//         return function(results, status) {
-//           if (status === 'OK') {
-//             map.fitBounds(bounds.extend(results[0].geometry.location));
-//             markersArray.push(new google.maps.Marker({
-//               map: map,
-//               position: results[0].geometry.location,
-//               icon: icon
-//             }));
-//           } else {
-//             console.log('Geocode was not successful due to: ' + status);
-//           }
-//         };
-//       };
-//
-//       for (var i = 0; i < originList.length; i++) {
-//         var results = response.rows[i].elements;
-//         geocoder.geocode({address: originList[i]}, showGeocodedAddressOnMap(false));
-//       for (var j = 0; j < results.length; j++) {
-//         geocoder.geocode({address: destinationList[j]},
-//         showGeocodedAddressOnMap(true));
-//         outputDiv.innerHTML += originList[i] + ' to ' + destinationList[j] +
-//         ': ' + results[j].distance.text + ' in ' + results[j].duration.text + '<br>';
-//        }
-//      }
-//    }
-//   });
-//  }
