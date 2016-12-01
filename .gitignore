@@ -5,6 +5,10 @@ npm-debug.log
 
 
 
+time out function
+[1,2,3,4,5].forEach((num, i) => setTimeout(() => console.log(num), i * 200))
+
+
 //creates a roadmap centered over Denver
 var map;
 var storeCoordsArr;

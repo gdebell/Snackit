@@ -16,7 +16,6 @@
   appConfig.init(app, express);
   routeConfig.init(app);
   errorConfig.init(app);
-
   module.exports = app;
 
 }());
