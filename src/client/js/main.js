@@ -73,7 +73,6 @@ var shortestData;
 
 //find all routes to grocery stories in db
 function findRoutes(directionsService) {
-  setTimeout(function() {
   var result = []
   for (var i = 0; i < locationListings.stores.length; i++ ) {
     var storeLat = parseFloat(locationListings.stores[i].lat);
@@ -117,11 +116,10 @@ function findRoutes(directionsService) {
     return shortestStoreLocation
   })
   .then(data => {
+    console.log('shortest store location:', data);
     var directionsService = new google.maps.DirectionsService();
-    //console.log('in the second promise', data);
     findRoutesSchool(data, locationListings, directionsService)
   })
-}, 1000);
 }
 
 function findRoutesSchool(storeLocal, locationListings, directionsService) {
@@ -143,20 +141,23 @@ function findRoutesSchool(storeLocal, locationListings, directionsService) {
         optimizeWaypoints: true,
         travelMode: 'DRIVING'
       }, (response, status) => {
-        console.log('response', response);
-        console.log('status', status);
+        //console.log('response', response);
+        //console.log('status', status);
         var route = response.routes[0];
-        var totalDistance = 0;
+        var totalDistanceEnd = 0;
         for (var i = 0; i < route.legs.length; i++) {
-          totalDistance += parseFloat(route.legs[i].distance.text);
+          totalDistanceEnd += parseFloat(route.legs[i].distance.text);
         }
-        console.log('after for looooooop');
-        response.totalDistance = totalDistance
+        //console.log('after for looooooop');
+        response.totalDistance = totalDistanceEnd
+        //console.log('response:', response);
+        //console.log('respinse.totalDistance', response.totalDistance);
         resolve(response);
-      })
+      }
+    )
     }))
   }
-  console.log('before prosmise dot all');
+  //console.log('before promise dot all');
   Promise.all(result)
   .then(res => {
     console.log('inside the school promise.all function');
@@ -167,18 +168,18 @@ function findRoutesSchool(storeLocal, locationListings, directionsService) {
       //console.log('total distance', totalDistance);
       if (totalDistance < shortestTotalDistance) {
         shortestTotalDistance = totalDistance;
-        shortestStoreLocation = res[i].routes[0].legs[0].end_address;
+        shortestSchoolLocation = res[i].routes[0].legs[0].end_address;
       }
     }
-    console.log(shortestTotalDistance, shortestStoreLocation);
+    console.log(shortestTotalDistance, shortestSchoolLocation);
     return shortestStoreLocation
   })
-  .then(data => {
-    var directionsService = new google.maps.DirectionsService();
-    console.log('in the second promise', data);
-    findRoutesSchool(data, locationListings, directionsService)
+  .then(moreData => {
+    console.log('in the second promise', moreData);
+    console.log('AT AT AT AT AT AT AT AT AT');
+    //findRoutesSchool(data, locationListings, directionsService)
   })
-}, 2000);
+}, 10000);
 }
 
 
