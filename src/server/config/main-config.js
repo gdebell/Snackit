@@ -32,6 +32,7 @@
     if (process.env.NODE_ENV !== 'test') {
       app.use(morgan('dev'));
     }
+
     app.use(cookieParser());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
