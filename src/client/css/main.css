@@ -1,8 +1,15 @@
-/* both pages */
+body {
+  margin: 0;
+  background-color: rgb(246,246,246);
+  width: 100%;
+  overflow-x: hidden;
+}
+
 #twlv {
   width: 100%;
   height: 150px;
   text-align: center;
+  margin: 0%;
 }
 
 #startButton, #searchMap {
@@ -37,14 +44,14 @@
 }
 
 
-body {
-  background-color: rgb(246,246,246);
-  width: 100%;
-}
 
 h1, h5 {
   color: rgb(80,80,80);
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+h1 {
+  font-size: 50px;
 }
 
 #mainPageImage {
@@ -82,7 +89,7 @@ h1, h5 {
 
 
 .one {
-  background-image: url("http://www.chinadaily.com.cn/culture/attachement/jpg/site1/20140807/00221917dec4154d289108.jpg");
+  background-image: url("../../css/images/watermelon.jpg");
 }
 
 
@@ -95,7 +102,7 @@ h1, h5 {
 }
 
 .four {
-  background-image: url("http://cdn-image.myrecipes.com/sites/default/files/styles/420x420/public/image/galleries/10/kid-approved-fruit-x.jpg?itok=1mPiSCFy");
+  background-image: url("../../css/images/strawberry.jpg");
 }
 
 .photoSection {
