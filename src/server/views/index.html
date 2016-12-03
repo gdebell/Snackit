@@ -4,9 +4,54 @@
 
 {% block content %}
 
-  <div class="container">
-    <h1>{{title}}</h1>
-    <h2>The sum is {{sum}}</h2>
+
+<div>
+  <div class="header" id="twlv">
+    <h1>Snackit</h1>
+    <h5>A Smart Application Connecting Snacks and Students</h5>
   </div>
+
+
+  <div class="statement" id="twlv">
+    <div class="rw-wrapper">
+      <h2 class="rw-sentence">
+  	    <span>Volunteers delivering </span>
+  	    <div class="rw-words rw-words-2">
+  	      <span>brain power</span>
+  	      <span>fuel</span>
+    			<span>kindness</span>
+    			<span>blueberries</span>
+    			<span>carrots</span>
+    			<span>happiness</span>
+  	    </div><br>
+    	  <span>to students all across Denver.</span>
+      </h2>
+      <a href="/map"><button type="button" id="startButton" onclick="map/map">Get Started</button></a>
+    </div>
+  </div>
+
+  <div class="information" id="infoSection">
+    <div class="flex-grid">
+      <div class="photoSection  col one" id="six">
+      </div>
+      <div class="photoSection col two" id="six">
+        <h2>Hello</h2>
+      </div>
+    </div>
+    <div class="flex-grid" id="twlv">
+      <div class="photoSection col three" id="six">
+        <h2>Here is some text</h2>
+      </div>
+      <div class="photoSection col four" id="six">
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+      <p>&copy 2016 Snackit | Contact Us: <a href="mailto:someone@example.com">
+    snackit@snack.com</a>| Like Us: <i class="fa fa-facebook-official" aria-hidden="true"></i> | Follow Us:   <i class="fa fa-twitter-square" aria-hidden="true"></i></p>
+  </div>
+</div>
+
 
 {% endblock %}
