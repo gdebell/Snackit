@@ -5,16 +5,28 @@ body {
   overflow-x: hidden;
 }
 
-#twlv {
+#full {
   width: 100%;
   height: 150px;
   text-align: center;
-  margin: 0%;
 }
 
-#startButton, #searchMap {
+#startButton {
   color: white;
-  background-color: rgb(255,141,92);
+  background-color: rgb(255,141,153);
+  border: none;
+  border-radius: 5px;
+  height: 50px;
+  width: 50%;
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+
+#searchMap {
+  color: white;
+  background-color: rgb(255,141,153);
   border: none;
   border-radius: 5px;
   height: 50px;
@@ -23,16 +35,13 @@ body {
   font-size: 20px;
 }
 
-#startButton {
-  margin-top: 10px;
+.header {
+  background-color: rgb(255,141,92);
+  padding: 5px;
 }
 
 .statement {
-  margin-bottom: 30px;
-}
-
-.header {
-  background-color: rgb(255,141,92);
+  margin-bottom: 80px;
 }
 
 .footer {
@@ -44,14 +53,39 @@ body {
 }
 
 
-
-h1, h5 {
+h1 {
   color: rgb(80,80,80);
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-size: 70px;
+  letter-spacing: 0.2em;
+  margin-top: -2px;
+  margin-bottom: -1.5px;
+}
+
+p {
+  color: rgb(80,80,80);
+  font-family: "Lucida Console", Monaco, monospace;
+  word-spacing: 0.2em;
+  font-size: 12px;
+}
+ a {
+   text-decoration: none;
+   color: rgb(80,80,80);
+ }
+
+h2 {
+  color: rgb(246,246,246);
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
 
-h1 {
-  font-size: 50px;
+.photoSection h2{
+  color: rgb(246,246,246);
+  font-family: "Trebuchet MS", Helvetica, sans-serif
+  word-spacing: 0.5em;
+  letter-spacing: 0.2em;
+  font-size: 18px;
+  text-align: center;
+  padding: 2px;
 }
 
 #mainPageImage {
@@ -114,15 +148,12 @@ h1 {
 }
 
 
-/* index.html*/
-
-
 .rw-wrapper{
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   display: block;
-  margin: 0 10%;
   padding: 2.5% 20%;
   background-color: rgb(246,246,246);
+  font-size: 30px;
 }
 
 .rw-sentence{
@@ -140,6 +171,7 @@ h1 {
 
 .rw-words{
 	display: inline;
+  align-items: center;
 }
 
 .rw-words span{
@@ -156,12 +188,12 @@ h1 {
 
 .rw-words span:nth-child(1) {
 	animation-delay: 0s;
-	color: rgb(255,141,153);  /*pink*/
+	color: rgb(107,231,134); /*green*/
   font-weight: bold;
 }
 .rw-words span:nth-child(2) {
 	animation-delay: 3s;
-	color: rgb(153,235,255); /*blue*/
+	color: rgb(54,222,246); /*blue*/
   font-weight: bold;
 }
 .rw-words span:nth-child(3) {
@@ -171,17 +203,17 @@ h1 {
 }
 .rw-words span:nth-child(4) {
 	animation-delay: 9s;
-	color: rgb(255,141,153);  /*pink*/
+	color: rgb(246,78,78);  /*red*/
   font-weight: bold;
 }
 .rw-words span:nth-child(5) {
 	animation-delay: 12s;
-	color: rgb(153,235,255); /*blue*/
+	color: rgb(14,128,234); /*blue*/
   font-weight: bold;
 }
 .rw-words span:nth-child(6) {
 	animation-delay: 15s;
-	color: rgb(191,148,228); /*purple*/
+	color: rgb(170,102,229); /*purple*/
   font-weight: bold;
 }
 
