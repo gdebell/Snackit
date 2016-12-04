@@ -23,7 +23,6 @@ body {
   margin-top: 10px;
 }
 
-
 #startAddress, #endAddress {
   height: 50px;
   width: 200px;
@@ -31,7 +30,6 @@ body {
   margin: 10px;
   text-align: center;
 }
-
 
 #searchMap {
   color: white;

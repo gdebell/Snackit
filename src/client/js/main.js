@@ -1,4 +1,4 @@
-//creates a roadmap centered over Denver
+//global variables
 var map;
 var shortestStoreLocation;
 var shortestTotalDistance = 100000000;
@@ -6,78 +6,14 @@ var shortestData;
 var shortestSchoolLocationEnd;
 var shortestTotalDistanceEnd = 100000000;
 var closestSchool;
-
-function initMap() {
-  var directionsService = new google.maps.DirectionsService();
-  var directionsDisplay = new google.maps.DirectionsRenderer();
-  map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
-    center: new google.maps.LatLng(39.7033, -105.00),
-    mapTypeId: 'roadmap'
-  });
-  directionsDisplay.setMap(map);
-  //ajax request to get long/lat of schools and stores in database
-  $.ajax({
-      type: 'GET',
-      url: '/map/data',
-      data: 'json'
-    })
-    .then((data) => {
-      //console.log(data);
-      createMarkers(data);
-    })
-    .fail((err) => {
-      console.log(err);
-    });
-  //on submit, gets the start/end location from DOM
-  $('.route').on('submit', (eve) => {
-    eve.preventDefault();
-    const start = $('#startAddress').val();
-    const end = $('#endAddress').val();
-    findRoutes(directionsService);
-  });
-}
-
-//puts school and store markers on the map from database
 var locationListings;
-
-function createMarkers(results) {
-  locationListings = results;
-  //create school markers
-  var appleImage = {
-    url: 'http://www.freeiconspng.com/uploads/apple-icon-19.png',
-    scaledSize: new google.maps.Size(30, 30)
-  };
-  for (var i = 0; i < results.schools.length; i++) {
-    var lat = parseFloat(results.schools[i].lat);
-    var long = parseFloat(results.schools[i].long);
-    var latLng = new google.maps.LatLng(lat, long);
-    var marker = new google.maps.Marker({
-      position: latLng,
-      icon: appleImage,
-      map: map
-    });
-  }
-  //create store markers
-  var storeImage = {
-    url: 'https://cdn3.iconfinder.com/data/icons/map-markers-1/512/supermarket-512.png',
-    scaledSize: new google.maps.Size(30, 30)
-  };
-  for (var j = 0; j < results.stores.length; j++) {
-    var storeLat = parseFloat(results.stores[j].lat);
-    var storeLong = parseFloat(results.stores[j].long);
-    var latLngStore = new google.maps.LatLng(storeLat, storeLong);
-    var markerStore = new google.maps.Marker({
-      position: latLngStore,
-      icon: storeImage,
-      map: map
-    });
-  }
-}
+var shortestStoreName;
+var shortestSchoolName;
 
 //find all routes to grocery stories in db
 function findRoutes(directionsService) {
   var result = [];
+  //console.log(locationListings.stores[0].name);
   for (var i = 0; i < locationListings.stores.length; i++) {
     var storeLat = parseFloat(locationListings.stores[i].lat);
     var storeLong = parseFloat(locationListings.stores[i].long);
@@ -87,6 +23,7 @@ function findRoutes(directionsService) {
       stopover: true
     }];
     result.push(new Promise((resolve, reject) => {
+      var storeName = locationListings.stores[i].name;
       directionsService.route({
         origin: document.getElementById('startAddress').value,
         destination: document.getElementById('endAddress').value,
@@ -96,9 +33,11 @@ function findRoutes(directionsService) {
       }, (response, status) => {
         var route = response.routes[0];
         var totalDistance = 0;
+
         for (var i = 0; i < route.legs.length; i++) {
           totalDistance += parseFloat(route.legs[i].distance.text);
         }
+        response.name = storeName;
         response.totalDistance = totalDistance;
         resolve(response);
       });
@@ -113,6 +52,7 @@ function findRoutes(directionsService) {
         if (totalDistance < shortestTotalDistance) {
           shortestTotalDistance = totalDistance;
           shortestStoreLocation = res[i].routes[0].legs[0].end_address;
+          shortestStoreName = res[i].name
         }
       }
       return shortestStoreLocation;
@@ -122,6 +62,7 @@ function findRoutes(directionsService) {
       findRoutesSchool(data, locationListings, directionsService);
     });
 }
+
 //find all routes to school in db
 function findRoutesSchool(storeLocal, locationListings, directionsService) {
   setTimeout(function() {
@@ -135,6 +76,7 @@ function findRoutesSchool(storeLocal, locationListings, directionsService) {
         stopover: true
       }];
       result.push(new Promise((resolve, reject) => {
+        var schoolName = locationListings.schools[i].name;
         directionsService.route({
           origin: storeLocal,
           destination: document.getElementById('endAddress').value,
@@ -142,11 +84,13 @@ function findRoutesSchool(storeLocal, locationListings, directionsService) {
           optimizeWaypoints: true,
           travelMode: 'DRIVING'
         }, (response, status) => {
+          //console.log(response, status);
           var route = response.routes[0];
           var totalDistance = 0;
           for (var i = 0; i < route.legs.length; i++) {
             totalDistance += parseFloat(route.legs[i].distance.text);
           }
+          response.schoolName = schoolName;
           response.totalDistance = totalDistance;
           resolve(response);
         });
@@ -161,6 +105,7 @@ function findRoutesSchool(storeLocal, locationListings, directionsService) {
           if (totalDistance < shortestTotalDistanceEnd) {
             shortestTotalDistanceEnd = totalDistance;
             shortestSchoolLocationEnd = res[i].routes[0].legs[0].end_address;
+            shortestSchoolName = res[i].schoolName;
           }
         }
         return shortestSchoolLocationEnd;
@@ -204,8 +149,8 @@ function drawFinalRoute(store, school) {
           }
           routeTotalTime += parseFloat(result.routes[0].legs[i].duration.text);
         }
-        console.log('route total time', typeof routeTotalTime);
-        console.log('route original time', typeof originalRoute);
+        //console.log('route total time', typeof routeTotalTime);
+        //console.log('route original time', typeof originalRoute);
         //console.log(drivingDirections);
         // console.log(directionsDisplay.setDirections);
         setTimeout(function () {
@@ -215,15 +160,16 @@ function drawFinalRoute(store, school) {
             optimizeWaypoints: true,
             travelMode: 'DRIVING'
           }, (response, status) => {
-            console.log('here is the information for just the reg route!!');
-            console.log(response, status);
+            //console.log('here is the information for just the reg route!!');
+            //console.log(response, status);
             originalRoute = parseFloat(response.routes[0].legs[0].duration.text);
           });
-        }, 1000)
+        }, 1000);
 
         var extraTime = routeTotalTime - originalRoute;
 
-        $("div.additionlTime").html('<p> Your delivery will only add ' + extraTime + ' minutes of drive time to your original route.</p>');
+
+        $("div.additionlTime").html('<p> Your delivery will only add ' + extraTime + ' minutes of drive time to your original route.  You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName + '. Thank you!</p>');
 
         $("div.directions").html(drivingDirections);
         directionsDisplay.setDirections(result);
@@ -233,11 +179,4 @@ function drawFinalRoute(store, school) {
       }
     });
   }, 1000);
-}
-
-function deleteMarkers(markersArray) {
-  for (var i = 0; i < markersArray.length; i++) {
-    markersArray[i].setMap(null);
-  }
-  markersArray = [];
 }
