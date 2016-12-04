@@ -5,26 +5,56 @@
 {% block content %}
 
 
-<div class="container">
-  <div class="row">
+<!-- <div class="container">
+  <div class="row headerPageTwo">
     <h1>Snackit</h1>
   </div>
-  <div class="row">
+  <div class="row" id="full">
     <form class="route">
      <div class="form-group">
          <input type="text" class="form-control" id="startAddress" placeholder="Start Address">
-     </div>
-     <div class="form-group">
        <input type="text" class="form-control" id="endAddress" placeholder="End Address">
      </div>
      <button type="submit" class="btn btn-default" id="searchMap">Calculate My Snackit Route</button>
     </form>
   </div>
+  <div id="output"></div>
+  <div class="row mapDisplay">
+    <div id="map"></div>
+    <div id="additionalTime" class="additionlTime"></div>
+    <div id="directions_summary" class="directions" style="margin:20px;background-color:#FFEE77;"></div>
+  </div>
+</div> -->
+
+<div class="container">
+  <div class="row headerPageTwo">
+    <h1>Snackit</h1>
+  </div>
+
+  <div class="information">
+    <div class="flex-grid">
+
+      <div class="photoSection  col six">
+        <form class="route">
+
+         <div class="form-group">
+             <input type="text" class="form-control" id="startAddress" placeholder="Start Address">
+           <input type="text" class="form-control" id="endAddress" placeholder="End Address">
+         </div>
+         <button type="submit" class="btn btn-default" id="searchMap">Calculate My Snackit Route</button>
+        </form>
+        <div id="map"></div>
+      </div>
+
+      <div class="photoSection col two">
+        <div id="directions_summary" class="directions" style="margin:20px;background-color:#FFEE77;"></div>
+      </div>
+    </div>
+  </div>
 </div>
-<div id="output"></div>
-<div id="map"></div>
-<div id="additionalTime" class="additionlTime"></div>
-<div id="directions_summary" class="directions" style="margin:20px;background-color:#FFEE77;"></div>
+
+
+
 
 {% endblock %}
 
