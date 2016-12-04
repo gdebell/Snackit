@@ -119,6 +119,7 @@ function findRoutesSchool(storeLocal, locationListings, directionsService) {
 
 //draws the final route on the map
 function drawFinalRoute(store, school) {
+  var drivingDirections = [];
   var directionsDisplay = new google.maps.DirectionsRenderer();
   var directionsService = new google.maps.DirectionsService();
   directionsDisplay.setMap(map);
@@ -138,7 +139,6 @@ function drawFinalRoute(store, school) {
       travelMode: 'DRIVING'
     };
     directionsService.route(request, function(result, status) {
-      var drivingDirections = [];
       var routeTotalTime = 0;
       var originalRoute;
       if (status === 'OK') {
@@ -149,10 +149,6 @@ function drawFinalRoute(store, school) {
           }
           routeTotalTime += parseFloat(result.routes[0].legs[i].duration.text);
         }
-        //console.log('route total time', typeof routeTotalTime);
-        //console.log('route original time', typeof originalRoute);
-        //console.log(drivingDirections);
-        // console.log(directionsDisplay.setDirections);
         setTimeout(function () {
           directionsService.route({
             origin: document.getElementById('startAddress').value,
@@ -160,23 +156,21 @@ function drawFinalRoute(store, school) {
             optimizeWaypoints: true,
             travelMode: 'DRIVING'
           }, (response, status) => {
-            //console.log('here is the information for just the reg route!!');
-            //console.log(response, status);
             originalRoute = parseFloat(response.routes[0].legs[0].duration.text);
+            $("div.directions").html(drivingDirections);
+            directionsDisplay.setDirections(result);
+            displayInfo(routeTotalTime, originalRoute);
           });
+
         }, 1000);
-
-        var extraTime = routeTotalTime - originalRoute;
-
-
-        $("div.additionlTime").html('<p> Your delivery will only add ' + extraTime + ' minutes of drive time to your original route.  You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName + '. Thank you!</p>');
-
-        $("div.directions").html(drivingDirections);
-        directionsDisplay.setDirections(result);
-
       } else {
         console.log('Error due to ', status);
       }
     });
   }, 1000);
+}
+
+function displayInfo (extra, original) {
+  var extraTime = extra - original;
+  $("div.additionlTime").html('<p> Your delivery will only add ' + extraTime + ' minutes of drive time to your original route.  You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName + '. Thank you!</p>');
 }
