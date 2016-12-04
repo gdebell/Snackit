@@ -13,8 +13,6 @@ router.get('/', function (req, res, next) {
     knex('store')
     .select('*')
     .then((moreData) => {
-      //console.log(data);
-      //console.log(moreData);
       renderObject.schools = data;
       renderObject.stores = moreData;
       res.render('map/map', renderObject);
@@ -31,8 +29,6 @@ router.get('/data', function (req, res, next) {
     knex('store')
     .select('*')
     .then((moreData) => {
-      //console.log(data);
-      //console.log(moreData);
       renderObject.schools = data;
       renderObject.stores = moreData;
       res.json({

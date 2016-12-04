@@ -1,3 +1,7 @@
+.route {
+  text-align: center;
+}
+
 body {
   margin: 0;
   background-color: rgb(246,246,246);
@@ -9,6 +13,37 @@ body {
   width: 100%;
   height: 150px;
   text-align: center;
+}
+
+#directions_summary {
+  border: 2px solid rgb(255,141,153);
+  text-align: center;
+  width: 60%;
+  margin-left: 20%;
+  margin-top: 5%;
+}
+
+#orange {
+  opacity: 0;
+  height: 100px;
+  width: 100px;
+}
+
+#orangeLoad {
+  opacity: 0;
+  text-align: center;
+  border: 2px dotted black;
+  height: 10%;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+#orangeText {
+  font-size: 30px;
+  color: rgb(255,141,92);
+  font-weight: bold;
+  font-family: Georgia, Times, serif;
+
 }
 
 #startButton {
@@ -24,9 +59,9 @@ body {
 }
 
 #startAddress, #endAddress {
-  height: 50px;
-  width: 200px;
-  border: 2px solid rgb(36,202,172);
+  height: 40px;
+  width: 20% ;
+  border: 2px solid rgb(255,141,153);
   margin: 10px;
   text-align: center;
 }
@@ -37,7 +72,7 @@ body {
   border: none;
   border-radius: 5px;
   height: 50px;
-  width: 50%;
+  width: 40%;
   font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
   font-size: 20px;
 }
@@ -113,9 +148,7 @@ h2 {
   height: 500px;
   width: 90%;
   margin-left: 5%;
-  margin-top: 5%;
   border: 2px solid rgb(80,80,80);
-
 }
 
 .mapDisplay {

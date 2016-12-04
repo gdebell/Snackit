@@ -1,4 +1,6 @@
 //global variables
+
+
 var map;
 var shortestStoreLocation;
 var shortestTotalDistance = 100000000;
@@ -6,24 +8,24 @@ var shortestData;
 var shortestSchoolLocationEnd;
 var shortestTotalDistanceEnd = 100000000;
 var closestSchool;
-var locationListings;
 var shortestStoreName;
 var shortestSchoolName;
+var databaseLocation;
 
 //find all routes to grocery stories in db
 function findRoutes(directionsService) {
   var result = [];
-  //console.log(locationListings.stores[0].name);
-  for (var i = 0; i < locationListings.stores.length; i++) {
-    var storeLat = parseFloat(locationListings.stores[i].lat);
-    var storeLong = parseFloat(locationListings.stores[i].long);
+  //console.log(databaseLocation.stores[0].name);
+  for (var i = 0; i < databaseLocation.stores.length; i++) {
+    var storeLat = parseFloat(databaseLocation.stores[i].lat);
+    var storeLong = parseFloat(databaseLocation.stores[i].long);
     var first = new google.maps.LatLng(storeLat, storeLong);
     var waypts = [{
       location: first,
       stopover: true
     }];
     result.push(new Promise((resolve, reject) => {
-      var storeName = locationListings.stores[i].name;
+      var storeName = databaseLocation.stores[i].name;
       directionsService.route({
         origin: document.getElementById('startAddress').value,
         destination: document.getElementById('endAddress').value,
@@ -58,25 +60,27 @@ function findRoutes(directionsService) {
       return shortestStoreLocation;
     })
     .then(data => {
+      console.log('data', data, 'location listing', databaseLocation);
       var directionsService = new google.maps.DirectionsService();
-      findRoutesSchool(data, locationListings, directionsService);
+      findRoutesSchool(data, databaseLocation, directionsService);
+      return data;
     });
 }
 
 //find all routes to school in db
-function findRoutesSchool(storeLocal, locationListings, directionsService) {
+function findRoutesSchool(storeLocal, databaseLocation, directionsService) {
   setTimeout(function() {
     var result = [];
-    for (var i = 0; i < locationListings.schools.length; i++) {
-      var schoolLat = parseFloat(locationListings.schools[i].lat);
-      var schoolLong = parseFloat(locationListings.schools[i].long);
+    for (var i = 0; i < databaseLocation.schools.length; i++) {
+      var schoolLat = parseFloat(databaseLocation.schools[i].lat);
+      var schoolLong = parseFloat(databaseLocation.schools[i].long);
       var second = new google.maps.LatLng(schoolLat, schoolLong);
       var waypts = [{
         location: second,
         stopover: true
       }];
       result.push(new Promise((resolve, reject) => {
-        var schoolName = locationListings.schools[i].name;
+        var schoolName = databaseLocation.schools[i].name;
         directionsService.route({
           origin: storeLocal,
           destination: document.getElementById('endAddress').value,
@@ -158,10 +162,12 @@ function drawFinalRoute(store, school) {
           }, (response, status) => {
             originalRoute = parseFloat(response.routes[0].legs[0].duration.text);
             $("div.directions").html(drivingDirections);
+            $("#orange").removeClass("animated infinite tada");
+            $("#orange").css("opacity", 0);
+            $("#orangeText").css("opacity", 0);
             directionsDisplay.setDirections(result);
             displayInfo(routeTotalTime, originalRoute);
           });
-
         }, 1000);
       } else {
         console.log('Error due to ', status);

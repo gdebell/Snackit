@@ -1,6 +1,5 @@
 //creates a roadmap centered over Denver
 function initMap() {
-  var directionsService = new google.maps.DirectionsService();
   var directionsDisplay = new google.maps.DirectionsRenderer();
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
@@ -15,25 +14,28 @@ function initMap() {
       data: 'json'
     })
     .then((data) => {
-      //console.log(data);
       createMarkers(data);
     })
     .fail((err) => {
       console.log(err);
     });
-  //on submit, gets the start/end location from DOM
-  $('.route').on('submit', (eve) => {
-    eve.preventDefault();
-    const start = $('#startAddress').val();
-    const end = $('#endAddress').val();
-    findRoutes(directionsService);
-  });
 }
 
+//on submit, gets the start/end location from DOM
+$('.route').on('submit', (eve) => {
+  var directionsService = new google.maps.DirectionsService();
+  eve.preventDefault();
+  const start = $('#startAddress').val();
+  const end = $('#endAddress').val();
+  findRoutes(directionsService);
+  $("#orange").addClass("animated infinite tada");
+  $('#orange').css("opacity", 1);
+  $('#orangeLoad').css("opacity", 1);
+});
+
 //puts school and store markers on the map from database
-var locationListings;
 function createMarkers(results) {
-  locationListings = results;
+  databaseLocation = results;
   //create school markers
   var appleImage = {
     url: 'http://www.freeiconspng.com/uploads/apple-icon-19.png',
@@ -64,12 +66,4 @@ function createMarkers(results) {
       map: map
     });
   }
-}
-
-//deletes the Markers on the map
-function deleteMarkers(markersArray) {
-  for (var i = 0; i < markersArray.length; i++) {
-    markersArray[i].setMap(null);
-  }
-  markersArray = [];
 }
