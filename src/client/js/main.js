@@ -1,6 +1,4 @@
 //global variables
-
-
 var map;
 var shortestStoreLocation;
 var shortestTotalDistance = 100000000;
@@ -178,5 +176,5 @@ function drawFinalRoute(store, school) {
 
 function displayInfo (extra, original) {
   var extraTime = extra - original;
-  $("div.additionlTime").html('<p> Your delivery will only add ' + extraTime + ' minutes of drive time to your original route.  You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName + '. Thank you!</p>');
+  $("div.additionlTime").html('<h6 id="informUser"> Your delivery will only add ' + extraTime + ' minutes of drive time to your original route. ' + ' You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName +  '. <br> Scroll to the bottom for directions!</h6>');
 }

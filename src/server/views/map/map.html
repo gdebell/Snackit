@@ -26,27 +26,33 @@
   </div>
 </div> -->
 
-<div class="container">
+<div class="pageTwo">
+
   <div class="row headerPageTwo">
     <h1 class="animated rubberBand">Snackit</h1>
   </div>
-  <div>
+
+  <div id="userInput">
     <form class="route">
-      <div class="form-group">
-        <input type="text" class="form-control" id="startAddress" placeholder="Start Address">
-        <input type="text" class="form-control" id="endAddress" placeholder="End Address">
-        <button type="submit" class="btn btn-default" id="searchMap">Calculate My Snackit Route</button>
-      </div>
+      <p>Volunteering with Snackit is easy! Enter your origin and destination. Then click 'Calculate My Snackit Route' to find a partner store and partner school.</p>
+      <input type="text" class="form-control" id="startAddress" placeholder="Start Address">
+      <input type="text" class="form-control" id="endAddress" placeholder="End Address"><br>
+      <button type="submit" class="btn btn-default" id="searchMap">Calculate My Snackit Route</button>
     </form>
   </div>
 
-  <div id ="orangeLoad">
-    <div class="additionlTime"></div>
-    <p id="orangeText">Orange you glad we are calculating<br> the shortest route for you.</p>
-    <img src="http://cliparts.co/cliparts/yik/rk6/yikrk6brT.png" id="orange" alt="Smiley face">
+    <div id ="orangeLoad">
+      <div class="additionlTime"></div>
+      <p id="orangeText">Orange you glad we're calculating the shortest for you!</p><img src="http://cliparts.co/cliparts/yik/rk6/yikrk6brT.png" id="orange" alt="orange">
+    </div>
+
+
+  <div id="mapArea">
+    <div id="map"></div>
   </div>
-  <div id="map"></div>
+
   <div id="directions_summary" class="directions"></div>
+
 </div>
 
 
