@@ -1,3 +1,4 @@
+
 //global variables
 var map;
 var shortestStoreLocation;
@@ -176,32 +177,76 @@ function drawFinalRoute(store, school) {
 
 function displayInfo (extra, original, route) {
   var userPhone = document.getElementById('telephone').value
-  console.log(userPhone);
-  console.log('hers is your route', route);
+  const payLoad = {
+    phone: userPhone,
+    directions: "" + route
+  };
+  console.log('user phone', userPhone);
+  console.log('route', route);
+  console.log('here is payload!', payLoad);
+
   var extraTime = extra - original;
   $("div.additionlTime").html('<h6 id="informUser"> Your delivery will add ' + extraTime + ' minutes of drive time to your original route. ' + ' You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName +  '. <br> Scroll to the bottom for directions!</h6>');
 
-  console.log('inside click click click');
-    // Your Twilio credentials
-    var SID = "AC98cf9c80cd5fa0cc9af34ab23c832d20"
-    var Key = "4502d73ddf59b93f08d83fdddc081020"
+  $.ajax({
+    type: 'POST',
+    url: '/map/data',
+    data: payLoad
+  })
+  .done((data) => {
+    console.log('data', data);
+    //console.log(data.data);
+    //console.log(data.data.phone);
+    var userPhone = data.data.phone;
+    var SID = data.data.sid;
+    var Key = data.data.api;
+    var route = data.data.directions;
 
-    $.ajax({
-        type: 'POST',
-        url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
-        data: {
-            "To" : "+1" + `${userPhone}`,
-            "From" : "+12014742256 ",
-            "Body" : "" + `${route}`
-        },
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader ("Authorization", "Basic " + btoa(SID + ':' + Key));
-        },
-        success: function(data) {
-            console.log(data);
-        },
-        error: function(data) {
-            console.log(data);
-        }
-    });
+      $.ajax({
+          type: 'POST',
+          url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
+          data: {
+              "To" : "" + `${userPhone}`,
+              "From" : "+12014742256",
+              "Body" : "" + `${route}`
+          },
+          beforeSend: function (xhr) {
+              xhr.setRequestHeader ("Authorization", "Basic " + btoa(SID + ':' + Key));
+          },
+          success: function(data) {
+              console.log(data);
+          },
+          error: function(data) {
+              console.log(data);
+          }
+      });
+  })
+  .fail((error) => {
+    console.log('error message', error);
+  });
 }
+
+
+  // console.log('inside click click click');
+  //   // Your Twilio credentials
+  //   var SID = "AC98cf9c80cd5fa0cc9af34ab23c832d20"
+  //   var Key = "4502d73ddf59b93f08d83fdddc081020"
+  //
+  //   $.ajax({
+  //       type: 'POST',
+  //       url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
+  //       data: {
+  //           "To" : "+1" + `${userPhone}`,
+  //           "From" : "+12014742256",
+  //           "Body" : "" + `${route}`
+  //       },
+  //       beforeSend: function (xhr) {
+  //           xhr.setRequestHeader ("Authorization", "Basic " + btoa(SID + ':' + Key));
+  //       },
+  //       success: function(data) {
+  //           console.log(data);
+  //       },
+  //       error: function(data) {
+  //           console.log(data);
+  //       }
+  //   });
