@@ -206,7 +206,7 @@ function displayInfo (extra, original, route) {
           type: 'POST',
           url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
           data: {
-              "To" : "" + `${userPhone}`,
+              "To" : "+1" + `${userPhone}`,
               "From" : "+12014742256",
               "Body" : "" + `${route}`
           },
