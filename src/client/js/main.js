@@ -179,7 +179,9 @@ function displayInfo (extra, original, route) {
   var userPhone = document.getElementById('telephone').value
   const payLoad = {
     phone: userPhone,
-    directions: "" + route
+    directions: "" + route,
+    store: shortestStoreName,
+    school: shortestSchoolName
   };
   console.log('user phone', userPhone);
   console.log('route', route);
@@ -201,6 +203,10 @@ function displayInfo (extra, original, route) {
     var SID = data.data.sid;
     var Key = data.data.api;
     var route = data.data.directions;
+    var store = data.data.store;
+    var school = data.data.school;
+
+    var message= "Thank for volunteering with Snackit!  You will be stopping at " + store + " " + " and at " + school + " " +  ".  Here is your route: " + route + " " + " Drive safely. "
 
       $.ajax({
           type: 'POST',
@@ -208,7 +214,7 @@ function displayInfo (extra, original, route) {
           data: {
               "To" : "+1" + `${userPhone}`,
               "From" : "+12014742256",
-              "Body" : "" + `${route}`
+              "Body" : "" + `${message}`
           },
           beforeSend: function (xhr) {
               xhr.setRequestHeader ("Authorization", "Basic " + btoa(SID + ':' + Key));

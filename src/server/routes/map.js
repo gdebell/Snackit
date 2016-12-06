@@ -47,6 +47,8 @@ router.post('/data', function (req, res, next) {
   var messageData = {
     phone: req.body.phone,
     directions: req.body.directions,
+    store: req.body.store,
+    school: req.body.school,
     sid: process.env.KEY_1,
     api: process.env.KEY_2
   }
