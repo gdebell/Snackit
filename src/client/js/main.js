@@ -183,10 +183,6 @@ function displayInfo (extra, original, route) {
     store: shortestStoreName,
     school: shortestSchoolName
   };
-  console.log('user phone', userPhone);
-  console.log('route', route);
-  console.log('here is payload!', payLoad);
-
   var extraTime = extra - original;
   $("div.additionlTime").html('<h6 id="informUser"> Your delivery will add ' + extraTime + ' minutes of drive time to your original route. ' + ' You will be stopping at ' + shortestStoreName + ' and ' + shortestSchoolName +  '. <br> Scroll to the bottom for directions!</h6>');
 
@@ -196,15 +192,13 @@ function displayInfo (extra, original, route) {
     data: payLoad
   })
   .done((data) => {
-    console.log('data', data);
-    //console.log(data.data);
-    //console.log(data.data.phone);
     var userPhone = data.data.phone;
     var SID = data.data.sid;
     var Key = data.data.api;
     var route = data.data.directions;
     var store = data.data.store;
     var school = data.data.school;
+    var number = data.data.twilio;
 
     var message= "Thank for volunteering with Snackit!  You will be stopping at " + store + " " + " and at " + school + " " +  ".  Here is your route: " + route + " " + " Drive safely. "
 
@@ -213,7 +207,7 @@ function displayInfo (extra, original, route) {
           url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
           data: {
               "To" : "+1" + `${userPhone}`,
-              "From" : "+12014742256",
+              "From" : "" + `${number}`,
               "Body" : "" + `${message}`
           },
           beforeSend: function (xhr) {
@@ -231,28 +225,3 @@ function displayInfo (extra, original, route) {
     console.log('error message', error);
   });
 }
-
-
-  // console.log('inside click click click');
-  //   // Your Twilio credentials
-  //   var SID = "AC98cf9c80cd5fa0cc9af34ab23c832d20"
-  //   var Key = "4502d73ddf59b93f08d83fdddc081020"
-  //
-  //   $.ajax({
-  //       type: 'POST',
-  //       url: 'https://api.twilio.com/2010-04-01/Accounts/' + SID + '/Messages.json',
-  //       data: {
-  //           "To" : "+1" + `${userPhone}`,
-  //           "From" : "+12014742256",
-  //           "Body" : "" + `${route}`
-  //       },
-  //       beforeSend: function (xhr) {
-  //           xhr.setRequestHeader ("Authorization", "Basic " + btoa(SID + ':' + Key));
-  //       },
-  //       success: function(data) {
-  //           console.log(data);
-  //       },
-  //       error: function(data) {
-  //           console.log(data);
-  //       }
-  //   });

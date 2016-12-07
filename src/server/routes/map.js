@@ -7,7 +7,6 @@ const passport = require('passport');
 
 //get data from server side data base
 router.get('/', function (req, res, next) {
-  console.log('hello');
   const renderObject = {};
   knex('school')
   .select('*')
@@ -43,14 +42,15 @@ router.get('/data', function (req, res, next) {
 
 //get the telephone number
 router.post('/data', function (req, res, next) {
-  console.log('in map post >>>>>>>AGAIN');
+  var twilioNumb = 12014742256;
   var messageData = {
     phone: req.body.phone,
     directions: req.body.directions,
     store: req.body.store,
     school: req.body.school,
     sid: process.env.KEY_1,
-    api: process.env.KEY_2
+    api: process.env.KEY_2,
+    twilio: twilioNumb
   }
   res.send({data: messageData});
 })
