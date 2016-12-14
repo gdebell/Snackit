@@ -1,5 +1,13 @@
 //creates a roadmap centered over Denver
 function initMap() {
+  var appleImage = {
+    url: 'http://www.freeiconspng.com/uploads/apple-icon-19.png',
+    scaledSize: new google.maps.Size(30, 30)
+  };
+  var storeImage = {
+    url: 'https://cdn3.iconfinder.com/data/icons/map-markers-1/512/supermarket-512.png',
+    scaledSize: new google.maps.Size(30, 30)
+  };
   var directionsDisplay = new google.maps.DirectionsRenderer();
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 12,
@@ -14,7 +22,8 @@ function initMap() {
       data: 'json'
     })
     .then((data) => {
-      createMarkers(data);
+      createMarkers(data, 'stores', storeImage);
+      createMarkers(data, 'schools', appleImage)
     })
     .fail((err) => {
       console.log(err);
@@ -33,36 +42,19 @@ $('.route').on('submit', (eve) => {
   $('#orangeLoad').css("opacity", 1);
 });
 
+//var x = findRoutes(directionsService);
+//make sure to return a value from directionsService
+
 //puts school and store markers on the map from database
-function createMarkers(results) {
+function createMarkers(results, type, img) {
   databaseLocation = results;
-  //create school markers
-  var appleImage = {
-    url: 'http://www.freeiconspng.com/uploads/apple-icon-19.png',
-    scaledSize: new google.maps.Size(30, 30)
-  };
-  for (var i = 0; i < results.schools.length; i++) {
-    var lat = parseFloat(results.schools[i].lat);
-    var long = parseFloat(results.schools[i].long);
+  for (var i = 0; i < results[type].length; i++) {
+    var lat = parseFloat(results[type][i].lat);
+    var long = parseFloat(results[type][i].long);
     var latLng = new google.maps.LatLng(lat, long);
     var marker = new google.maps.Marker({
       position: latLng,
-      icon: appleImage,
-      map: map
-    });
-  }
-  //create store markers
-  var storeImage = {
-    url: 'https://cdn3.iconfinder.com/data/icons/map-markers-1/512/supermarket-512.png',
-    scaledSize: new google.maps.Size(30, 30)
-  };
-  for (var j = 0; j < results.stores.length; j++) {
-    var storeLat = parseFloat(results.stores[j].lat);
-    var storeLong = parseFloat(results.stores[j].long);
-    var latLngStore = new google.maps.LatLng(storeLat, storeLong);
-    var markerStore = new google.maps.Marker({
-      position: latLngStore,
-      icon: storeImage,
+      icon: img,
       map: map
     });
   }

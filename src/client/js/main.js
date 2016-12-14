@@ -1,12 +1,7 @@
 
 //global variables
 var map;
-var shortestStoreLocation;
-var shortestTotalDistance = 100000000;
-var shortestData;
-var shortestSchoolLocationEnd;
-var shortestTotalDistanceEnd = 100000000;
-var closestSchool;
+
 var shortestStoreName;
 var shortestSchoolName;
 var databaseLocation;
@@ -47,6 +42,7 @@ function findRoutes(directionsService) {
   //finds the shortest route to get to the store, returns store address
   Promise.all(result)
     .then(res => {
+      var shortestTotalDistance = 100000000;
       for (var i = 0; i < res.length; i++) {
         let totalDistance = 0;
         totalDistance += parseFloat(res[i].totalDistance);
@@ -59,15 +55,14 @@ function findRoutes(directionsService) {
       return shortestStoreLocation;
     })
     .then(data => {
-      console.log('data', data, 'location listing', databaseLocation);
       var directionsService = new google.maps.DirectionsService();
-      findRoutesSchool(data, databaseLocation, directionsService);
+      findRoutesSchool(data, databaseLocation, directionsService, shortestStoreLocation);
       return data;
     });
 }
 
 //find all routes to school in db
-function findRoutesSchool(storeLocal, databaseLocation, directionsService) {
+function findRoutesSchool(storeLocal, databaseLocation, directionsService, shortestStoreLocation) {
   setTimeout(function() {
     var result = [];
     for (var i = 0; i < databaseLocation.schools.length; i++) {
@@ -102,6 +97,9 @@ function findRoutesSchool(storeLocal, databaseLocation, directionsService) {
     //finds the shortest school route
     Promise.all(result)
       .then(res => {
+        var closestSchool;
+        var shortestTotalDistanceEnd = 100000000;
+        var shortestSchoolLocationEnd;
         for (var i = 0; i < res.length; i++) {
           let totalDistance = 0;
           totalDistance += parseFloat(res[i].totalDistance);
