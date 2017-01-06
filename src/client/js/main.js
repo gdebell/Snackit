@@ -29,7 +29,6 @@ function findRoutes(directionsService) {
       }, (response, status) => {
         var route = response.routes[0];
         var totalDistance = 0;
-
         for (var i = 0; i < route.legs.length; i++) {
           totalDistance += parseFloat(route.legs[i].distance.text);
         }
