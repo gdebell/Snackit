@@ -59,7 +59,6 @@ function findRoutes(directionsService) {
       return shortestStoreLocation;
     })
     .then(data => {
-      console.log('data', data, 'location listing', databaseLocation);
       var directionsService = new google.maps.DirectionsService();
       findRoutesSchool(data, databaseLocation, directionsService);
       return data;
