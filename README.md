@@ -10,4 +10,4 @@
 
 
 ## Visit Snackit:
-### Link to deployed site: https://snaskit.herokuapp.com/
+### Link to deployed site: https://snackit.herokuapp.com/
