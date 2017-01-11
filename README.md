@@ -9,5 +9,5 @@
 ### JavaScript, HTML5, CSS3, NodeJS, jQuery, PostgreSQL, Knex, Express.js, Google Maps API, and the Twilio API.
 
 
-### Visit Our Site:
+### Visit Snackit:
 ### Link to deployed site: https://snaskit.herokuapp.com/
