@@ -20,15 +20,11 @@ function sendMessage() {
       to:'+7209873456',
       from:'12014742256',
       body:'ahoy hoy! Testing Twilio and node.js'
-  }, function(error, message) {
+    }, function(error, message) {
       if (!error) {
-          console.log('Success! The SID for this SMS message is:');
-          console.log(message.sid);
-
-          console.log('Message sent on:');
-          console.log(message.dateCreated);
+        console.log('Success! The SID for this SMS message is:');
       } else {
-          console.log('Oops! There was an error.');
+        console.log('Oops! There was an error.');
       }
   })
 }

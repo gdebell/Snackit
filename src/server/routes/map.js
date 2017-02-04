@@ -4,7 +4,6 @@ const indexController = require('../controllers/index');
 const knex = require('../db/knex');
 const passport = require('passport');
 
-
 //get data from server side data base
 router.get('/', function (req, res, next) {
   const renderObject = {};
@@ -51,8 +50,8 @@ router.post('/data', function (req, res, next) {
     sid: process.env.KEY_1,
     api: process.env.KEY_2,
     twilio: twilioNumb
-  }
+  };
   res.send({data: messageData});
-})
+});
 
 module.exports = router;
